@@ -1,39 +1,47 @@
 #!/usr/bin/env python3
 
 import os
-import fnmatch
+import subprocess
 
-#check if system has curl
-curl_output = os.system('curl --version')
+os.system('sudo apt-get update')
+os.system('sudo apt-get upgrade')
+os.system('sudo apt-get dist-upgrade')
 
-if curl_output == fnmatch.fnmatch(str(curl_output), 'curl *'):
-    print('curl is installed')
+#check if system has curl the
+
+curl_command = subprocess.run('curl --version',  stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+if curl_command.returncode == 0:
+    print('curl is installed\n')
 else:
-    print('curl needs to be installed on this machine')
+    print('curl needs to be installed on this machine\n')
     # installs curl
     os.system('sudo apt install curl')
 
-#check if system has unzip
-unzip_output = os.system('unzip --version')
+# check if system has unzip
+unzip_command = subprocess.run('unzip --help',  stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
-if unzip_output == fnmatch.fnmatch(str(unzip_output), '* Usage: unzip *'):
-    print('unzip is installed')
+if unzip_command.returncode == 0:
+    print('unzip is installed\n')
 else:
-    print('uunzip needs to be installed on this machine')
+    print('unzip needs to be installed on this machine\n')
     # installs curl
     os.system('sudo apt install unzip')
 
-#install aws cli
+# # #install aws cli
 
-os.system('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
-os.system('unzip awscliv2.zip')
-os.system('sudo ./aws/install')
+aws_output = subprocess.run('aws --version',  stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
-#check if system has aws cli
-aws_output = os.system('aws --version')
-
-if aws_output == fnmatch.fnmatch(str(aws_output), 'aws-cli/*'):
-    print('aws cli is installed')
+if aws_output.returncode == 0:
+    print('aws cli is installed\n')
 else:
-    print('aws cli needs to be installed on this machine')
+    print('aws cli needs to be installed on this machine\n')
+    # installs aws cli
+    os.system('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
+    os.system('unzip awscliv2.zip')
+    os.system('sudo ./aws/install')
+    #check if system has aws cli
+    aws_output = os.system('aws --version')
+    print(aws_output)
+
 
