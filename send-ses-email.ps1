@@ -8,10 +8,10 @@ $smtpPassword = ConvertTo-SecureString '****SMTP PASSWORD HERE****' -AsPlainText
 # Send Email - change the values if needed.
 Send-MailMessage -Credential $credential `
 -useSSL `
--smtpServer 'email-smtp.ap-southeast-2.amazonaws.com' `
+-smtpServer 'email-smtp.us-east-1.amazonaws.com' `
 -port 587 `
--from 'mailer@lzex.cf' `
--to 'june@lzex.cf' `
+-from '****FROM EMAIL HERE****' `
+-to '****TO EMAIL ADRESS****' `
 -subject `
 'Email via Amazon SES SMTP Endpoint' `
 -body 'Email via Amazon SES SMTP Endpoint'
