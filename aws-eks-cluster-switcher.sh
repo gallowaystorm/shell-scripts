@@ -15,6 +15,11 @@ echo "Setting AWS region..."
 
 export AWS_PROFILE=$AWS_PROFILE
 
+echo "Clusters in account and region:"
+
+CLUSTERS=$(aws eks list-clusters)
+echo $CLUSTERS
+
 read -p "Enter name of AWS EKS Cluster: " EKS_CLUSTER
 
 echo "You entered '$EKS_CLUSTER'"
