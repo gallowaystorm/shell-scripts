@@ -1,32 +1,44 @@
 #!/bin/bash
-set -e
 
-read -p "Enter AWS Profile: " AWS_PROFILE
+# Get profiles
+awsProfiles=$(aws configure list-profiles | sort -V)
 
-echo "You entered '$AWS_PROFILE'"
+PS3="Enter a profile number: "
 
-echo "Setting AWS Profile..."
+echo "** Select an AWS Profile:"
+select profile in $awsProfiles; do
+    echo "-> Selected AWS Profile: ${profile}"
+    selectedAWSProfile="${profile}"
+    break
+done
 
-read -p "Enter AWS region: " AWS_REGION
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+export AWS_PROFILE="${selectedAWSProfile}"
 
-echo "You entered '$AWS_REGION'"
+checkSelectedAWSProfile=$(aws configure list 2>&1)
 
-echo "Setting AWS region..."
+# If the profile is SSO and session has expired, try to re-login
+if echo "$checkSelectedAWSProfile" | grep 'The SSO session' > /dev/null 2>&1 ; then
+    echo "-> SSO session has expired"
+    aws sso login
+fi
 
-export AWS_PROFILE=$AWS_PROFILE
+echo "-> Profile Details:"
+echo "${checkSelectedAWSProfile}"
 
-echo "Clusters in account and region:"
+echo -e "\n"
 
-CLUSTERS=$(aws eks list-clusters)
-echo $CLUSTERS
+# Get EKS Clusters
+awsEKSClusters=$(aws eks list-clusters | jq -r '.clusters[]')
 
-read -p "Enter name of AWS EKS Cluster: " EKS_CLUSTER
+PS3="Enter a cluster number: "
 
-echo "You entered '$EKS_CLUSTER'"
+echo "** Select an EKS Cluster:"
+select cluster in $awsEKSClusters; do
+    echo "-> Selected Cluster: ${cluster}"
+    selectedEKSCluster="${cluster}"
+    break
+done
 
-echo "Connecting to cluster..."
-
-aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER
-
-
-
+aws eks update-kubeconfig --name="${selectedEKSCluster}"
