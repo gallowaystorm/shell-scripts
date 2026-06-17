@@ -17,3 +17,5 @@ EOF
 win_tmp_ps1="$(wslpath -w "$tmp_ps1")"
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath 'PowerShell.exe' -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File','$win_tmp_ps1')"
+
+ping -c 3 8.8.8.8
