@@ -8,7 +8,7 @@ cat > "$tmp_ps1" <<'EOF'
 $ErrorActionPreference = 'Stop'
 
 Get-NetAdapter |
-	Where-Object { $_.InterfaceDescription -Match 'Cisco AnyConnect' } |
+	Where-Object { $_.InterfaceDescription -Match 'Cisco AnyConnect Virtual Miniport Adapter for Windows x64' } |
 	Set-NetIPInterface -InterfaceMetric 6000
 
 Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue
